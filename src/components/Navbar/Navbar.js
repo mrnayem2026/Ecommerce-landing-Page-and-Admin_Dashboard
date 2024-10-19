@@ -1,14 +1,31 @@
 import React, { useState } from 'react'
-import { Search, User, ShoppingCart, Menu, X } from 'lucide-react'
+import { Search, User, ShoppingCart, Menu, X, LogOut } from 'lucide-react'
 import Container from '../Container'
 import AuthButtons from '../AuthButtons'
+import Cookies from "js-cookie";
+import { jwtDecode } from 'jwt-decode';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  const isAuthenticated = true;
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
+
+  const token = Cookies.get("token");
+  let role = null;
+  let Id = null;
+
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    role = decodedToken.role;
+    Id = decodedToken._id;
+  }
+  const handleLogout = () => {
+    Cookies.remove("token");
+    window.location.href = "/login";
+  };
+
 
   return (
     <nav className="bg-white shadow-md">
@@ -37,7 +54,17 @@ export default function Navbar() {
                   className="bg-gray-100 text-gray-700 rounded-full py-2 px-4  focus:outline-none focus:ring-2 focus:ring-indigo-600"
                 />
               </div>
-              <AuthButtons />
+              {token ? (
+                <button
+                  onClick={handleLogout}
+                 className="flex items-center justify-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-200 ease-in-out w-full sm:w-auto"
+                >
+                  <LogOut className="w-5 h-5 mr-2" />
+                  Logout
+                </button>
+              ) : (
+                <AuthButtons />
+              )}
             </div>
 
             {/* Mobile menu button */}

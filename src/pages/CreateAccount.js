@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import ImageLight from '../assets/img/create-account-office.jpeg'
 import ImageDark from '../assets/img/create-account-office-dark.jpeg'
 import { GithubIcon, TwitterIcon } from '../icons'
 import { Input, Label, Button } from '@windmill/react-ui'
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { toast, Toaster } from 'react-hot-toast';
 
 function Login() {
   const [form, setForm] = useState({
@@ -25,10 +28,11 @@ function Login() {
         "http://localhost:3030/api/users/register",
         form
       );
+      console.log(response.data);
       Cookies.set("token", response.data["token"], { expires: 7 });
-      toast.success('Successfully login!')
+      toast.success('Successfully Register!')
       // redirect to home page
-      window.location.href = "/";
+      window.location.href = "/login";
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -58,16 +62,22 @@ function Login() {
                 Create account
               </h1>
               <Label className="mt-4">
-                <span>Confirm password</span>
-                <Input className="mt-1" placeholder="***************" type="password" />
+                <span>Name</span>
+                <Input className="mt-1" placeholder="Name" type="text" name="name"
+                  value={form.name}
+                  onChange={handleChange} />
               </Label>
-              <Label>
+              <Label className="mt-4">
                 <span>Email</span>
-                <Input className="mt-1" type="email" placeholder="john@doe.com" />
+                <Input className="mt-1" type="email" placeholder="john@doe.com" name="email"
+                  value={form.email}
+                  onChange={handleChange} />
               </Label>
               <Label className="mt-4">
                 <span>Password</span>
-                <Input className="mt-1" placeholder="***************" type="password" />
+                <Input className="mt-1" placeholder="***************" type="password" name="password"
+                  value={form.password}
+                  onChange={handleChange} />
               </Label>
               <Label className="mt-6" check>
                 <Input type="checkbox" />
@@ -76,12 +86,12 @@ function Login() {
                 </span>
               </Label>
 
-              <Button tag={Link} to="/login" block className="mt-4">
+              <Button block className="mt-4" onClick={handleSubmit}>
                 Create account
               </Button>
 
               <hr className="my-8" />
-
+              {/* 
               <Button block layout="outline">
                 <GithubIcon className="w-4 h-4 mr-2" aria-hidden="true" />
                 Github
@@ -89,7 +99,8 @@ function Login() {
               <Button block className="mt-4" layout="outline">
                 <TwitterIcon className="w-4 h-4 mr-2" aria-hidden="true" />
                 Twitter
-              </Button>
+              </Button> */}
+              <Toaster />
 
               <p className="mt-4">
                 <Link

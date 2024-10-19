@@ -12,6 +12,7 @@
     "classnames": "2.2.6",
     "faker": "4.1.0",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.453.0",
     "react": "^16.13.1",
     "react-chartjs-2": "2.9.0",
